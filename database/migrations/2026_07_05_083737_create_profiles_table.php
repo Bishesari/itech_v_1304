@@ -16,10 +16,7 @@ return new class extends Migration
             $table->id();
 
             // User
-            $table->foreignId('user_id')
-                ->unique()
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
 
             // Identity
             $table->tinyInteger('identifier_type')

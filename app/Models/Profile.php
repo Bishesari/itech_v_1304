@@ -64,12 +64,26 @@ class Profile extends Model
     }
 
     /**
-     * @return BelongsToMany<Contact, $this>
+     * اطلاعات تماس این پروفایل
+     *
+     * * @return BelongsToMany<Contact, $this, ContactProfile>
      */
     public function contacts(): BelongsToMany
     {
-        return $this->belongsToMany(Contact::class, 'contact_profile')
-            ->withPivot(['role', 'is_primary'])
+        return $this->belongsToMany(Contact::class)
+            ->using(ContactProfile::class)
+            ->withPivot([
+                'role',
+                'is_primary',
+            ])
             ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -15,4 +15,26 @@ class Province extends Model
     {
         return $this->hasMany(City::class);
     }
+
+    /**
+     * پروفایل‌هایی که محل سکونتشان این استان است.
+     *
+     * @return HasMany<Profile, $this>
+     */
+
+    public function profiles(): HasMany
+    {
+        return $this->hasMany(Profile::class);
+    }
+
+    /**
+     * پروفایل‌هایی که محل تولدشان این استان است.
+     *
+     * @return HasMany<Profile, $this>
+     */
+    public function birthProfiles(): HasMany
+    {
+        return $this->hasMany(Profile::class, 'birth_province_id');
+    }
+
 }
