@@ -64,18 +64,13 @@ class Profile extends Model
     }
 
     /**
-     * اطلاعات تماس این پروفایل
-     *
-     * * @return BelongsToMany<Contact, $this, ContactProfile>
+     * @return BelongsToMany<Contact, $this, ContactProfile, 'pivot'>
      */
     public function contacts(): BelongsToMany
     {
         return $this->belongsToMany(Contact::class)
             ->using(ContactProfile::class)
-            ->withPivot([
-                'role',
-                'is_primary',
-            ])
+            ->withPivot(['role', 'is_primary'])
             ->withTimestamps();
     }
 

@@ -30,16 +30,13 @@ class Contact extends Model
     }
 
     /**
-     * @return BelongsToMany<Profile, Contact, ContactProfile, 'contact_profile'>
+     * @return BelongsToMany<Profile, $this, ContactProfile, 'pivot'>
      */
     public function profiles(): BelongsToMany
     {
         return $this->belongsToMany(Profile::class)
             ->using(ContactProfile::class)
-            ->withPivot([
-                'role',
-                'is_primary',
-            ])
+            ->withPivot(['role', 'is_primary'])
             ->withTimestamps();
     }
 
