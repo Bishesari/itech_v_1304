@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use app\Enums\UserStatus;
+use app\Enums\UserStatusww;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -47,7 +47,7 @@ class User extends Authenticatable implements PasskeyUser
     {
         return [
             'password' => 'hashed',
-            'status' => UserStatus::class,
+            'status' => UserStatusww::class,
             'last_login_at' => 'datetime',
         ];
     }
@@ -66,6 +66,6 @@ class User extends Authenticatable implements PasskeyUser
 
     public function isActive(): bool
     {
-        return $this->status === UserStatus::Active;
+        return $this->status === UserStatusww::Active;
     }
 }
