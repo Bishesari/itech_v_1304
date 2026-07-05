@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -14,14 +16,11 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use app\Enums\UserStatusww;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
- * @property string $name
- * @property string $email
- * @property Carbon|null $email_verified_at
+ * @property string $username
+ * @property Carbon|null $last_login_at
  * @property string $password
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
@@ -29,13 +28,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property UserStatus $status
  */
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['username', 'password'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+
     use SoftDeletes;
 
     /**
@@ -47,7 +49,7 @@ class User extends Authenticatable implements PasskeyUser
     {
         return [
             'password' => 'hashed',
-            'status' => UserStatusww::class,
+            'status' => UserStatus::class,
             'last_login_at' => 'datetime',
         ];
     }
@@ -57,15 +59,25 @@ class User extends Authenticatable implements PasskeyUser
      */
     public function initials(): string
     {
-        $initials = Str::initials($this->name, true);
+        $initials = Str::initials($this->username, true);
 
         return Str::length($initials) > 1
-            ? Str::substr($initials, 0, 1) . Str::substr($initials, -1)
+            ? Str::substr($initials, 0, 1).Str::substr($initials, -1)
             : $initials;
     }
 
     public function isActive(): bool
     {
-        return $this->status === UserStatusww::Active;
+        return $this->status === UserStatus::Active;
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === UserStatus::Inactive;
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->status === UserStatus::Suspended;
     }
 }
