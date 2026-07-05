@@ -31,7 +31,7 @@ class Contact extends Model
 
     /**
      * @return BelongsToMany<Profile, $this, ContactProfile, 'pivot'>
-     */
+    */
     public function profiles(): BelongsToMany
     {
         return $this->belongsToMany(Profile::class)
