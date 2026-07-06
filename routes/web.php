@@ -11,11 +11,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__ . '/settings.php';
 
-use App\Services\Sms\ParsGreenService;
 
-Route::get('/otp-send', function (\App\Services\Auth\OtpService $otp) {
+Route::livewire('/register', 'pages::auth.register')->name('register');
 
-    $otp->send('09177755924');
-
-    return 'sent';
-});
