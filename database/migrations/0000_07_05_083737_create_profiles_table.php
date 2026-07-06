@@ -15,9 +15,6 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
 
-            // User
-            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
-
             // Identity
             $table->tinyInteger('identifier_type')
                 ->default(IdentifierType::NationalId->value)

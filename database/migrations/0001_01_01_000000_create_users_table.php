@@ -14,6 +14,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            
+            // Profile
+            $table->foreignId('profile_id')->unique()->constrained()->cascadeOnDelete();
 
             // Authentication
             $table->string('username', 25)->unique();

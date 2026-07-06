@@ -10,12 +10,14 @@ use App\Enums\MilitaryStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
 {
     use SoftDeletes;
-
+    
+    protected $guarded = [];
     protected function casts(): array
     {
         return [
@@ -74,11 +76,12 @@ class Profile extends Model
             ->withTimestamps();
     }
 
+
     /**
-     * @return BelongsTo<User, $this>
+     * @return HasOne<User, $this>
      */
-    public function user(): BelongsTo
+    public function user(): HasOne
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class);
     }
 }

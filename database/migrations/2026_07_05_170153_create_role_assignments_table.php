@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('profile_id')->constrained()->cascadeOnDelete();
             $table->foreignId('role_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('institute_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignId('branch_id')->nullable()->constrained()->cascadeOnDelete();
+            //$table->foreignId('institute_id')->nullable()->constrained()->cascadeOnDelete();
+            //$table->foreignId('branch_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('assigned_by_id')->nullable()->constrained('users')->nullOnDelete();
             $table->boolean('is_active')->default(true)->index();
             $table->timestamps();
-            $table->unique(['user_id', 'role_id', 'institute_id', 'branch_id'], 'unique_role_assignment');
+            //$table->unique(['profile_id', 'role_id', 'institute_id', 'branch_id'], 'unique_role_assignment');
 
-            $table->index('user_id');
+            $table->index('profile_id');
             $table->index('role_id');
-            $table->index(['institute_id', 'branch_id']);
+            //$table->index(['institute_id', 'branch_id']);
             $table->index(['profile_id', 'is_active']);
         });
     }
