@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ContactProfile extends Pivot
 {
+    protected $table = 'contact_profile';
     /**
      * @var list<string>
      */
@@ -38,5 +39,40 @@ class ContactProfile extends Pivot
     public function profile(): BelongsTo
     {
         return $this->belongsTo(Profile::class);
+    }
+
+    public function isPrimary(): bool
+    {
+        return $this->is_primary;
+    }
+
+    public function isSelf(): bool
+    {
+        return $this->role === ContactRole::Self;
+    }
+
+    public function isEmergency(): bool
+    {
+        return $this->role === ContactRole::Emergency;
+    }
+
+    public function isFather(): bool
+    {
+        return $this->role === ContactRole::Father;
+    }
+
+    public function isMother(): bool
+    {
+        return $this->role === ContactRole::Mother;
+    }
+
+    public function isGuardian(): bool
+    {
+        return $this->role === ContactRole::Guardian;
+    }
+
+    public function isOffice(): bool
+    {
+        return $this->role === ContactRole::Office;
     }
 }
