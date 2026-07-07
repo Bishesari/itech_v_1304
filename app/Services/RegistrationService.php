@@ -18,8 +18,8 @@ class RegistrationService
         private readonly UserService $userService,
         private readonly ProfileContactService $profileContactService,
         private readonly PasswordGenerator $passwordGenerator,
-    ) {
-    }
+    ) {}
+
     public function register(RegisterData $data): RegistrationResult
     {
         $result = DB::transaction(function () use ($data) {
@@ -60,5 +60,4 @@ class RegistrationService
 
         return $result;
     }
-
 }
