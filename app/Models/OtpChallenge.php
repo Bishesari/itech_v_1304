@@ -30,4 +30,23 @@ class OtpChallenge extends Model
     {
         return $this->belongsTo(RegistrationRequest::class);
     }
+    public function isVerified(): bool
+    {
+        return $this->verified_at !== null;
+    }
+
+    public function isInvalidated(): bool
+    {
+        return $this->invalidated_at !== null;
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expires_at->isPast();
+    }
+
+    public function canRetry(): bool
+    {
+        return $this->next_retry_at->isPast();
+    }
 }

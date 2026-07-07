@@ -32,6 +32,7 @@ return new class extends Migration
             $table->timestamp('verified_at')->nullable();
 
             $table->ipAddress('ip');
+            $table->string('user_agent', 500)->nullable();
 
             $table->timestamps();
         });

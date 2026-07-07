@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
 
             // Identity
-            $table->tinyInteger('identifier_type')
+            $table->unsignedTinyInteger('identifier_type')
                 ->default(IdentifierType::NationalId->value)
                 ->comment('1: National ID, 2: Foreigner ID, 3: Passport');
 
@@ -40,20 +40,20 @@ return new class extends Migration
             $table->foreignId('birth_city_id')->nullable()->constrained('cities');
 
             // Personal
-            $table->tinyInteger('gender')->nullable();
+            $table->unsignedTinyInteger('gender')->nullable();
 
             $table->string('religion', 30)->nullable();
             $table->string('religious_denomination', 30)->nullable();
 
             // Family
-            $table->tinyInteger('marital_status')->nullable();
-            $table->tinyInteger('children_count')->unsigned()->default(0);
+            $table->unsignedTinyInteger('marital_status')->nullable();
+            $table->unsignedTinyInteger('children_count')->unsigned()->default(0);
 
             // Military Service
-            $table->tinyInteger('military_status')->nullable();
+            $table->unsignedTinyInteger('military_status')->nullable();
 
             // Education
-            $table->tinyInteger('education_level')->nullable();
+            $table->unsignedTinyInteger('education_level')->nullable();
             $table->string('field_of_study', 50)->nullable();
 
             // Address
