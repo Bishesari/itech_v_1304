@@ -4,7 +4,7 @@
         <flux:text class="mt-2">{{ __('اطلاعات خواسته شده را کامل کنید.') }}</flux:text>
     </div>
 
-    <form wire:submit="cchchchchc" class="flex flex-col gap-6 mt-5 mb-3" autocomplete="off">
+    <form wire:submit="continueRegister" class="flex flex-col gap-6 mt-5 mb-3" autocomplete="off">
 
         <x-my.flt-lbl name="first_name_fa" label="{{ __('نام:') }}" maxlength="40" class="tracking-widest font-semibold"
             autofocus required />

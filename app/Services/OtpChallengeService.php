@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Data\OtpChallengeData;
 use App\Data\OtpChallengeResult;
 use App\Models\OtpChallenge;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class OtpChallengeService
@@ -19,38 +18,32 @@ class OtpChallengeService
 
         $plainCode = $this->generateCode();
 
-        $otpChallenge = DB::transaction(function () use ($data, $plainCode) {
+        $this->invalidatePreviousChallenges(
+            $data->registrationRequest->id
+        );
 
-            $this->invalidatePreviousChallenges(
-                $data->registrationRequest->id
-            );
+        $otpChallenge = OtpChallenge::create([
 
-            return OtpChallenge::create([
+            'registration_request_id' => $data->registrationRequest->id,
 
-                'registration_request_id' => $data->registrationRequest->id,
+            'code_hash' => Hash::make($plainCode),
 
-                'code_hash' => Hash::make($plainCode),
+            'attempts' => 0,
+            'next_retry_at' => now()->addSeconds(config('otp.retry_after')),
 
-                'attempts' => 0,
+            'expires_at' => now()->addMinutes(config('otp.expires_after')),
 
-                'next_retry_at' => now()->addSeconds(60),
+            'ip' => $data->ip,
 
-                'expires_at' => now()->addMinutes(5),
+            'user_agent' => $data->userAgent,
 
-                'ip' => $data->ip,
-
-                'user_agent' => $data->userAgent,
-
-            ]);
-
-        });
+        ]);
 
         return new OtpChallengeResult(
             otpChallenge: $otpChallenge,
             plainCode: $plainCode,
         );
     }
-
 
     /**
      * Invalidate previous active OTP challenges.
@@ -66,7 +59,6 @@ class OtpChallengeService
                 'invalidated_at' => now(),
             ]);
     }
-
 
     /**
      * Generate a six digit OTP code.

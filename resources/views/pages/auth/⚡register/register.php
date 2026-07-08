@@ -1,5 +1,9 @@
 <?php
 
+use App\Data\RegistrationRequestData;
+use App\Enums\ContactType;
+use App\Enums\IdentifierType;
+use App\Services\RegistrationRequestService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -17,9 +21,24 @@ class extends Component
 
     public string $mobile = '';
 
-    public function continueRegister()
-    {
+    public function continueRegister(
+        RegistrationRequestService $registrationRequestService,
+    ): void {
+
         $validated = $this->validate();
+
+        $data = RegistrationRequestData::fromValidated(
+            data: $validated,
+            identifierType: IdentifierType::NationalId,
+            contactType: ContactType::MOBILE,
+            ip: request()->ip(),
+            userAgent: request()->userAgent(),
+        );
+
+        $result = $registrationRequestService->create($data);
+
+        // موقتاً فقط برای تست
+        dd($result);
     }
 
     protected function rules(): array
@@ -35,7 +54,7 @@ class extends Component
             'last_name_fa' => [
                 'required',
                 'string',
-                'max:50',
+                'max:40',
             ],
 
             'n_code' => [
