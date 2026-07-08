@@ -21,9 +21,8 @@ class extends Component
 
     public string $mobile = '';
 
-    public function continueRegister(
-        RegistrationRequestService $registrationRequestService,
-    ): void {
+    public function continueRegister(RegistrationRequestService $registrationRequestService): void
+    {
 
         $validated = $this->validate();
 
@@ -38,7 +37,8 @@ class extends Component
         $result = $registrationRequestService->create($data);
 
         // موقتاً فقط برای تست
-        dd($result);
+        dd($result->otpChallenge->plainCode);
+
     }
 
     protected function rules(): array

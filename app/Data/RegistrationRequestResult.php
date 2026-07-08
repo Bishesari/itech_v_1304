@@ -9,9 +9,14 @@ readonly class RegistrationRequestResult
     public function __construct(
 
         /**
-         * Created registration request.
+         * Created or reused registration request.
          */
         public RegistrationRequest $registrationRequest,
+
+        /**
+         * Newly created OTP challenge.
+         */
+        public OtpChallengeResult $otpChallenge,
 
     ) {}
 }

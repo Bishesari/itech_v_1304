@@ -7,6 +7,7 @@ use App\Data\RegistrationRequestData;
 use App\Data\RegistrationRequestResult;
 use App\Enums\RegistrationRequestStatus;
 use App\Models\RegistrationRequest;
+use App\Services\Sms\SmsService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -14,6 +15,7 @@ class RegistrationRequestService
 {
     public function __construct(
         private readonly OtpChallengeService $otpChallengeService,
+        private readonly SmsService $smsService,
     ) {}
 
     /**
@@ -23,11 +25,11 @@ class RegistrationRequestService
         RegistrationRequestData $data
     ): RegistrationRequestResult {
 
-        return DB::transaction(function () use ($data) {
+        $result = DB::transaction(function () use ($data) {
 
             $registrationRequest = $this->findOrCreatePendingRequest($data);
 
-            $this->otpChallengeService->create(
+            $otpResult = $this->otpChallengeService->create(
                 new OtpChallengeData(
                     registrationRequest: $registrationRequest,
                     ip: $data->ip,
@@ -37,9 +39,20 @@ class RegistrationRequestService
 
             return new RegistrationRequestResult(
                 registrationRequest: $registrationRequest,
+                otpChallenge: $otpResult,
+            );
+        });
+
+        DB::afterCommit(function () use ($result) {
+
+            $this->smsService->sendOtp(
+                mobile: $result->registrationRequest->contact_value,
+                code: $result->otpChallenge->plainCode,
             );
 
         });
+
+        return $result;
     }
 
     /**
