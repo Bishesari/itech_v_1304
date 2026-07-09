@@ -11,3 +11,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/settings.php';
 
 Route::livewire('/register', 'pages::auth.register')->name('register');
+
+Route::livewire('/verify-otp', 'pages::auth.verify-otp')->name('verify-otp');

@@ -35,9 +35,9 @@ class extends Component
         );
 
         $result = $registrationRequestService->create($data);
-
-        // موقتاً فقط برای تست
-        dd($result->otpChallenge->plainCode);
+        session([
+            'registration_request_id' => $result->registrationRequest->id,
+        ]);
 
     }
 

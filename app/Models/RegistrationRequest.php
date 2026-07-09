@@ -49,4 +49,21 @@ class RegistrationRequest extends Model
     {
         return $this->hasOne(OtpChallenge::class)->latestOfMany();
     }
+
+    /**
+     * Get the current OTP challenge.
+     *
+     * The current challenge is the latest challenge that:
+     * - has not been verified
+     * - has not been invalidated
+     *
+     * @return HasOne<OtpChallenge, $this>
+     */
+    public function currentOtpChallenge(): HasOne
+    {
+        return $this->hasOne(OtpChallenge::class)
+            ->whereNull('verified_at')
+            ->whereNull('invalidated_at')
+            ->latestOfMany();
+    }
 }
